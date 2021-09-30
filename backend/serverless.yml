@@ -119,6 +119,11 @@ functions:
           request:
             schemas:
               application/json: ${file(models/update-todo-model.json)}
+          documentation:
+            summary: Update todo
+            description: Update existing todo
+            requestModels:
+              'application/json': TodoRequestUpdate
     iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-updatetodo-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
@@ -244,5 +249,5 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
-        ValidateRequestParameters: false
+        ValidateRequestParameters: true
         
