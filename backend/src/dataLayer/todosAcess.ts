@@ -1,14 +1,11 @@
 import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-//import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate';
-import { AttachmentUtils } from './attachmentUtils';
+import { AttachmentUtils } from '../utils/attachmentUtils';
 
 const XAWS = AWSXRay.captureAWS(AWS)
-
-//const logger = createLogger('TodosAccess')
 
 // TODO: Implement the dataLayer logic
 export class TodosAcess {
@@ -19,7 +16,7 @@ export class TodosAcess {
     }
   
     async getAllTodosPerUser(userId: string): Promise<TodoItem[]> {
-      console.log('Getting all todos')
+      console.log('Getting all todos per user')
   
       const result = await this.docClient.query({
         TableName: this.todosTable,
@@ -90,27 +87,15 @@ export class TodosAcess {
   
     async createAttachmentPresignedUrl (todoId: string): Promise<string> {
       console.log('Generating URL')
-      const url = AttachmentUtils(todoId)
+      const url = await AttachmentUtils(todoId)
       console.log(url)
 
       return url as string
     }
-   
-  
   
   }
-
-  
-  
   
   function createDynamoDBClient() {
-    if (process.env.IS_OFFLINE) {
-      console.log('Creating a local DynamoDB instance')
-      return new XAWS.DynamoDB.DocumentClient({
-        region: 'localhost',
-        endpoint: 'http://localhost:8000'
-      })
-    }
   
     return new XAWS.DynamoDB.DocumentClient()
   }

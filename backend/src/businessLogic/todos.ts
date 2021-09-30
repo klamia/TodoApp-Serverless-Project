@@ -1,17 +1,16 @@
-import { TodosAcess } from './todosAcess'
+import { TodosAcess } from '../dataLayer/todosAcess'
 import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-//import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
 import { TodoUpdate } from '../models/TodoUpdate';
-//import * as createError from 'http-errors'
+
 
 
 // TODO: Implement businessLogic
 
 const todosAcess = new TodosAcess()
-const s3BucketName = process.env.ATTACHMENT_S3_BUCKET
+const bucketName = process.env.ATTACHMENT_S3_BUCKET
 
 
 export async function getAllTodosPerUser(userId:string): Promise<TodoItem[]> {
@@ -30,7 +29,7 @@ export async function createTodo(
       name: createTodoRequest.name,
       dueDate: createTodoRequest.dueDate,
       done: false,
-      attachmentUrl: `https://${s3BucketName}.s3.amazonaws.com/${todoId}`
+      attachmentUrl: `https://${bucketName}.s3.amazonaws.com/${todoId}`
     })
   }
 
